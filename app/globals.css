@@ -1,0 +1,214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* === NOIR & BLADE — Premium Urban Barber, Burnt-Copper-System === */
+  /* Core Backgrounds */
+  --black: #050504;
+  --ink: #0B0A09;
+  --charcoal: #151311;
+  --panel: #1C1815;
+  --ink-800: #151311;
+  --ink-700: #1C1815;
+
+  /* Text */
+  --cream: #F0E7D8;
+  --cream-50: #F6EFE2;
+  --muted-cream: #B6AA9A;
+  --soft-muted: #7E7468;
+  --muted: #7E7468; /* legacy alias */
+
+  /* Signature Accent — Burnt Copper (einzige Akzentfarbe) */
+  --copper: #C15A2A;
+  --copper-dark: #8E3E1F;
+  --copper-muted: #A65A37;
+  --copper-soft: #D17A4A;
+
+  /* Lines */
+  --line: rgba(240, 231, 216, 0.14);
+  --line-strong: rgba(240, 231, 216, 0.26);
+  --overlay: rgba(5, 5, 4, 0.72);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background-color: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Subtile Film-Grain Textur für Premium-Atmosphäre */
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.25 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+
+/* Raue Wand-/Lederoptik für den Hero-Hintergrund */
+.texture-wall {
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(140% 80% at 50% -10%, rgba(60, 50, 38, 0.45) 0%, transparent 55%),
+    radial-gradient(120% 100% at 50% 110%, rgba(0, 0, 0, 0.75) 0%, transparent 60%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: auto, auto, 320px 320px;
+}
+
+.texture-wall::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.6;
+  mix-blend-mode: overlay;
+}
+
+/* Editorial Photo Placeholder - duotone, an Brand-Palette gebunden */
+.photo-placeholder {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 30% 20%, rgba(193, 90, 42, 0.14) 0%, transparent 55%),
+    radial-gradient(80% 60% at 80% 90%, rgba(142, 62, 31, 0.10) 0%, transparent 60%),
+    linear-gradient(135deg, #151311 0%, #1C1815 45%, #050504 100%);
+}
+
+.photo-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.55;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.photo-placeholder > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Editorial Trennlinien */
+.divider-fine {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(240, 231, 216, 0.20), transparent);
+}
+
+/* Selection */
+::selection {
+  background: var(--copper);
+  color: var(--cream);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink-800);
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2722;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--copper-dark);
+}
+
+/* Button Reset */
+button {
+  font-family: inherit;
+}
+
+/* Form Reset */
+input,
+select,
+textarea {
+  font-family: inherit;
+  background: transparent;
+  color: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* Numerische Marker im Magazin-Stil */
+.numeric-marker {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--copper);
+  letter-spacing: 0;
+}
+
+/* Subtile Copper-Underline für Links */
+.link-copper {
+  background-image: linear-gradient(to right, var(--copper), var(--copper));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-copper:hover {
+  background-size: 100% 2px;
+}
+
+/* Editorial Scribble (Stay Sharp) — Copper-Akzent */
+.scribble {
+  font-family: var(--font-marker), 'Brush Script MT', cursive;
+  color: var(--copper);
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Vertikale Skala-Animation */
+@keyframes scaleY {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes scribbleUnderline {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Hide scrollbar in marquee */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Reduzierte Bewegung respektieren */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

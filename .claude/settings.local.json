@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /tmp/noir-out.html -w \"HTTP %{http_code} | size %{size_download} bytes\\\\n\" http://localhost:3001/)",
+      "Read(//private/tmp/**)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "supabase",
+    "magic"
+  ]
+}
