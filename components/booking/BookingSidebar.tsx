@@ -7,27 +7,6 @@ import { services } from '@/data/services';
 import { team } from '@/data/team';
 import { STEP_LABELS } from './BookingProgress';
 
-const MONTHS_SHORT = [
-  'Jan',
-  'Feb',
-  'Mär',
-  'Apr',
-  'Mai',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Okt',
-  'Nov',
-  'Dez',
-];
-
-function compactDate(iso: string | null) {
-  if (!iso) return null;
-  const d = new Date(iso + 'T00:00:00');
-  return `${d.getDate()}. ${MONTHS_SHORT[d.getMonth()]}`;
-}
-
 export default function BookingSidebar() {
   const { state, goToStep } = useBooking();
 
@@ -101,8 +80,10 @@ export default function BookingSidebar() {
           value={barber?.name}
           sub={barber?.role}
         />
-        <SummaryLine label="Datum" value={compactDate(state.date)} />
-        <SummaryLine label="Uhrzeit" value={state.time} />
+        <SummaryLine
+          label="Termin"
+          value={state.step >= 4 ? 'Im Kalender wählen' : null}
+        />
 
         {service && (
           <div className="border-t border-cream/10 pt-4 mt-4 flex items-baseline justify-between">

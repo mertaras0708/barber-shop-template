@@ -16,7 +16,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 export default function StepFrame({
   stepLabel,
   current,
-  total = 6,
+  total = 4,
   title,
   description,
   children,

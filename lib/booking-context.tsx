@@ -99,9 +99,10 @@ function reducer(state: BookingState, action: Action): BookingState {
     case 'SET_STEP':
       return { ...state, step: action.step };
     case 'NEXT':
+      // Flow hat aktuell 4 Schritte: Service, Barber, Kontakt, Termin (Cal.com)
       return {
         ...state,
-        step: Math.min(6, state.step + 1) as BookingStep,
+        step: Math.min(4, state.step + 1) as BookingStep,
       };
     case 'BACK':
       return {
@@ -154,20 +155,20 @@ function isStepValid(state: BookingState): boolean {
       return !!state.serviceId;
     case 2:
       return !!state.barberId;
-    case 3:
-      return !!state.date;
-    case 4:
-      return !!state.time;
-    case 5: {
+    case 3: {
+      // Kontaktdaten – Name und E-Mail werden zur Vorbefüllung an Cal.com
+      // weitergegeben, Telefon ist optional (Cal.com fragt es selbst ab).
       const c = state.customer;
       return (
         c.name.trim().length > 1 &&
-        c.phone.trim().length > 4 &&
         EMAIL_RE.test(c.email.trim()) &&
         c.privacyAccepted
       );
     }
-    case 6:
+    case 4:
+      // Cal.com-Embed übernimmt die finale Datum-/Uhrzeitwahl und Buchung.
+      return true;
+    default:
       return true;
   }
 }

@@ -317,6 +317,12 @@ function HeroServicesIndex() {
 /*  HeroCutsStrip — kleine Editorial-Image-Strip (links, xl+)      */
 /* ─────────────────────────────────────────────────────────────── */
 
+const HERO_CUTS = [
+  { src: '/images/echte-cuts-1.png', alt: 'Frischer Haarschnitt bei NOIR & BLADE' },
+  { src: '/images/echte-cuts-2.png', alt: 'Sauberer Skin Fade von unseren Barbern' },
+  { src: '/images/echte-cuts-3.png', alt: 'Gepflegter Bart-Look nach dem Termin' },
+];
+
 function HeroCutsStrip() {
   const reduce = useReducedMotion();
   return (
@@ -334,42 +340,26 @@ function HeroCutsStrip() {
       </div>
 
       <div className="relative flex items-center gap-2">
-        {[0, 1, 2].map((i) => (
+        {HERO_CUTS.map((cut) => (
           <div
-            key={i}
-            aria-hidden
+            key={cut.src}
             className="
-              relative h-14 w-14 overflow-hidden
-              border border-cream/20 bg-black/40 backdrop-blur-[2px]
+              group relative h-14 w-14 overflow-hidden
+              border border-cream/20 bg-black/40
             "
           >
-            <svg viewBox="0 0 56 56" className="h-full w-full opacity-80">
-              <defs>
-                <linearGradient
-                  id={`cuts-tile-${i}`}
-                  x1="0"
-                  y1="0"
-                  x2="1"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#1C1815" />
-                  <stop offset="100%" stopColor="#050504" />
-                </linearGradient>
-              </defs>
-              <rect width="56" height="56" fill={`url(#cuts-tile-${i})`} />
-              <g
-                stroke="#F0E7D8"
-                strokeWidth="0.6"
-                fill="none"
-                opacity="0.85"
-              >
-                <circle cx="28" cy="24" r="10" />
-                <path d="M16 24 Q28 12 40 24" />
-                <path d="M17 30 Q28 38 39 30" />
-                <path d="M16 34 L16 50" />
-                <path d="M40 34 L40 50" />
-              </g>
-            </svg>
+            <Image
+              src={cut.src}
+              alt={cut.alt}
+              fill
+              quality={70}
+              sizes="56px"
+              className="
+                object-cover grayscale-[0.35]
+                transition-[transform,filter] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]
+                group-hover:grayscale-0 group-hover:scale-105
+              "
+            />
           </div>
         ))}
 

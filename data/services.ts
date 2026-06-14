@@ -30,7 +30,7 @@ export const services: Service[] = [
     duration: '30 Min.',
     durationMinutes: 30,
     category: 'Cut',
-    image: '/images/service-herrenhaarschnitt.jpg',
+    image: '/images/leistungen-herrenhaarschnitt.png',
   },
   {
     id: 'skin-fade',
@@ -44,7 +44,7 @@ export const services: Service[] = [
     duration: '45 Min.',
     durationMinutes: 45,
     category: 'Cut',
-    image: '/images/service-skin-fade.jpg',
+    image: '/images/leistungen-skinfade.png',
   },
   {
     id: 'haare-bart',
@@ -58,7 +58,7 @@ export const services: Service[] = [
     duration: '60 Min.',
     durationMinutes: 60,
     category: 'Cut',
-    image: '/images/service-haare-bart.jpg',
+    image: '/images/leistungen-haare-bart.png',
   },
   {
     id: 'bart-trimmen',
@@ -72,7 +72,7 @@ export const services: Service[] = [
     duration: '20 Min.',
     durationMinutes: 20,
     category: 'Beard',
-    image: '/images/service-bart-trimmen.jpg',
+    image: '/images/leistungen-bart-trimmen.png',
   },
   {
     id: 'nassrasur',
@@ -86,7 +86,7 @@ export const services: Service[] = [
     duration: '30 Min.',
     durationMinutes: 30,
     category: 'Beard',
-    image: '/images/service-nassrasur.jpg',
+    image: '/images/leistungen-nassrasur.png',
   },
   {
     id: 'styling-finish',
@@ -100,6 +100,6 @@ export const services: Service[] = [
     duration: '15 Min.',
     durationMinutes: 15,
     category: 'Style',
-    image: '/images/service-styling-finish.jpg',
+    image: '/images/leistungen-styling-finish.png',
   },
 ];

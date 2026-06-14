@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import clsx from 'clsx';
 
 type Variant = 'hero' | 'portrait' | 'gallery' | 'tile' | 'wide';
@@ -9,27 +13,52 @@ type Props = {
   caption?: string;
   label?: string;
   className?: string;
+  /** sizes-Attribut für next/image (Performance/Responsive) */
+  sizes?: string;
   children?: React.ReactNode;
 };
 
 /**
- * Editorial Photo Placeholder — sieht intentional aus, kein "broken image".
- * In Produktion durch echte WebP-Bilder via <Image src={src}> ersetzen.
+ * Editorial Photo Placeholder.
+ *
+ * Liegt unter `src` ein echtes Bild, wird es per next/image angezeigt.
+ * Fehlt die Datei (oder lädt sie nicht), bleibt die elegante SVG-Silhouette
+ * stehen — kein "broken image". Die Existenz wird clientseitig geprüft
+ * (gleiches Muster wie im Service-Carousel).
  */
 export default function PhotoPlaceholder({
+  src,
   alt,
   variant = 'hero',
   caption,
   label,
   className,
+  sizes = '(min-width: 1024px) 50vw, 100vw',
   children,
 }: Props) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (!src) {
+      setReady(false);
+      return;
+    }
+    let alive = true;
+    const probe = new window.Image();
+    probe.onload = () => alive && setReady(true);
+    probe.onerror = () => alive && setReady(false);
+    probe.src = src;
+    return () => {
+      alive = false;
+    };
+  }, [src]);
+
   return (
     <div
       role="img"
       aria-label={alt}
       className={clsx(
-        'photo-placeholder relative w-full h-full',
+        'photo-placeholder relative w-full h-full overflow-hidden',
         className,
       )}
     >
@@ -106,6 +135,17 @@ export default function PhotoPlaceholder({
         )}
       </svg>
 
+      {/* Echtes Bild — nur wenn die Datei existiert, sonst bleibt die SVG-Silhouette */}
+      {ready && src && (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          className="object-cover"
+        />
+      )}
+
       {/* Sehr feines Vignette-Overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -115,8 +155,8 @@ export default function PhotoPlaceholder({
         }}
       />
 
-      {/* Optional caption (filename / asset hint) */}
-      {caption && (
+      {/* caption (Datei-Hinweis) nur solange noch kein echtes Bild geladen ist */}
+      {caption && !ready && (
         <div className="absolute bottom-3 right-3 text-[10px] uppercase tracking-widest2 text-cream/35 font-mono">
           {caption}
         </div>

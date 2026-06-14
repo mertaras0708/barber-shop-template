@@ -15,10 +15,8 @@ import BookingFooter from './BookingFooter';
 
 import ServiceSelector from './steps/ServiceSelector';
 import BarberSelector from './steps/BarberSelector';
-import DatePicker from './steps/DatePicker';
-import TimeSlotSelector from './steps/TimeSlotSelector';
 import CustomerDetailsForm from './steps/CustomerDetailsForm';
-import BookingSummary from './steps/BookingSummary';
+import CalBookingStep from './steps/CalBookingStep';
 import BookingSuccess from './steps/BookingSuccess';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -143,13 +141,9 @@ function StepRouter() {
     case 2:
       return <BarberSelector />;
     case 3:
-      return <DatePicker />;
-    case 4:
-      return <TimeSlotSelector />;
-    case 5:
       return <CustomerDetailsForm />;
-    case 6:
-      return <BookingSummary />;
+    case 4:
+      return <CalBookingStep />;
     default:
       return null;
   }

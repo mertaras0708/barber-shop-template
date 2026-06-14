@@ -5,15 +5,15 @@ import { useBooking } from '@/lib/booking-context';
 export const STEP_LABELS = [
   'Service',
   'Barber',
-  'Datum',
-  'Uhrzeit',
   'Kontakt',
-  'Bestätigung',
+  'Termin',
 ] as const;
+
+export const STEP_COUNT = STEP_LABELS.length;
 
 export default function BookingProgress() {
   const { state } = useBooking();
-  const pct = (state.step / 6) * 100;
+  const pct = (state.step / STEP_COUNT) * 100;
 
   return (
     <div className="relative">

@@ -36,19 +36,24 @@ export default function SignatureExperience() {
             transition={{ duration: 1, ease }}
             className="col-span-12 lg:col-span-6 relative"
           >
-            <div className="relative aspect-[4/5]">
+            <div className="relative aspect-[4/5] overflow-hidden">
               <PhotoPlaceholder
-                src="/images/signature-experience.jpg"
+                src="/images/signature-experience.png"
                 alt="Detailaufnahme einer Bartrasur mit Klinge"
                 variant="gallery"
-                caption="signature-experience.jpg"
                 className="absolute inset-0"
+              />
+              {/* Abdunklung: Bild wirkt als ruhiger, dunkler Hintergrund,
+                  damit das Stats-Panel davor sauber lesbar bleibt. */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-ink/55 via-ink/30 to-ink/70"
               />
             </div>
 
             {/* Stats Overlay */}
-            <div className="absolute -bottom-6 left-6 right-6 md:left-10 md:right-10 lg:-right-12 lg:left-auto lg:w-[280px]">
-              <div className="border border-cream/15 bg-ink/95 backdrop-blur-sm divide-y divide-cream/10">
+            <div className="absolute -bottom-6 left-6 right-6 md:left-10 md:right-10 lg:-right-12 lg:left-auto lg:w-[280px] z-20">
+              <div className="border border-cream/15 bg-ink shadow-2xl shadow-black/60 backdrop-blur-sm divide-y divide-cream/10">
                 {stats.map((s) => (
                   <div
                     key={s.label}

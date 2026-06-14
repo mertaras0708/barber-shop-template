@@ -60,7 +60,7 @@ export default function Gallery() {
                     src={g.image}
                     alt={g.caption}
                     variant={span === 'wide' ? 'wide' : 'gallery'}
-                    caption={g.image.split('/').pop()}
+                    sizes={span === 'wide' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
                     className="absolute inset-0 transition-transform duration-[1400ms] group-hover:scale-[1.05]"
                   />
                 </div>

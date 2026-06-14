@@ -19,7 +19,7 @@ export default function CustomerDetailsForm() {
 
   return (
     <StepFrame
-      current={5}
+      current={3}
       stepLabel="Kontakt"
       title={
         <>
@@ -27,7 +27,7 @@ export default function CustomerDetailsForm() {
           <HeadlineHighlight case="inherit">Kontaktdaten</HeadlineHighlight>.
         </>
       }
-      description="Damit wir dich erreichen können, falls sich etwas am Termin ändert. Daten werden ausschließlich für diese Buchung verwendet."
+      description="Name und E-Mail werden im nächsten Schritt automatisch im Kalender vorbefüllt. Daten werden ausschließlich für diese Buchung verwendet."
     >
       <form
         onSubmit={(e) => e.preventDefault()}

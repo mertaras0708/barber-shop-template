@@ -42,7 +42,7 @@ export default function Team() {
                   src={b.image}
                   alt={`Portrait von ${b.name}, ${b.role}`}
                   variant="portrait"
-                  caption={b.image.split('/').pop()}
+                  sizes="(min-width: 768px) 33vw, 100vw"
                   className="absolute inset-0 transition-transform duration-[1200ms] group-hover:scale-[1.04]"
                 />
               </div>
