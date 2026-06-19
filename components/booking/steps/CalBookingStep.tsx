@@ -10,7 +10,7 @@ import CalEmbed from '../CalEmbed';
 import HeadlineHighlight from '@/components/HeadlineHighlight';
 
 export default function CalBookingStep() {
-  const { state, goToStep } = useBooking();
+  const { state, goToStep, setSuccess } = useBooking();
 
   const service = services.find((s) => s.id === state.serviceId);
   const barber =
@@ -20,6 +20,10 @@ export default function CalBookingStep() {
 
   const calUrl = getCalLink(state.barberId, state.serviceId);
   const calPath = getCalEmbedPath(state.barberId, state.serviceId);
+
+  // „Beliebiger Barber" ohne hinterlegten Team-/Round-Robin-Link soll einen
+  // klaren Hinweis zeigen statt der generischen Kombinations-Meldung.
+  const isAnyBarber = state.barberId === 'any';
 
   const customerName = state.customer.name.trim();
   const customerEmail = state.customer.email.trim();
@@ -48,12 +52,14 @@ export default function CalBookingStep() {
             <AlertTriangle className="h-6 w-6 text-copper" aria-hidden />
           </div>
           <p className="font-serif text-xl text-cream max-w-md leading-snug">
-            Für diese Kombination aus Barber und Service ist aktuell keine
-            Buchung verfügbar.
+            {isAnyBarber
+              ? 'Für „Beliebiger Barber" ist aktuell noch kein Online-Termin hinterlegt.'
+              : 'Für diese Kombination aus Barber und Service ist aktuell keine Buchung verfügbar.'}
           </p>
           <p className="mt-3 text-sm text-cream/60 max-w-md leading-relaxed">
-            Bitte wähle einen anderen Barber oder Service – oder kontaktiere uns
-            direkt, wir finden einen passenden Termin für dich.
+            {isAnyBarber
+              ? 'Bitte wähle vorerst einen konkreten Barber – oder kontaktiere uns direkt, wir teilen dich dem nächsten freien Barber zu.'
+              : 'Bitte wähle einen anderen Barber oder Service – oder kontaktiere uns direkt, wir finden einen passenden Termin für dich.'}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <button
@@ -83,6 +89,7 @@ export default function CalBookingStep() {
                 email: customerEmail || undefined,
                 notes: notes || undefined,
               }}
+              onBookingSuccess={(details) => setSuccess(details)}
             />
           </div>
 

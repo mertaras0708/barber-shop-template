@@ -58,19 +58,58 @@ type Prefill = {
   notes?: string;
 };
 
+/** Aus dem Cal.com-Event extrahierte Termin-Details (alle Felder optional). */
+export type CalBookingDetails = {
+  title?: string;
+  startTime?: string;
+  endTime?: string;
+};
+
 type Props = {
   /** Cal.com-Pfad, z. B. "origami-concepts/noah-haarschnitt" */
   calPath: string;
   prefill?: Prefill;
+  /** Wird aufgerufen, sobald Cal.com eine Buchung erfolgreich abgeschlossen hat. */
+  onBookingSuccess?: (details: CalBookingDetails) => void;
 };
+
+/**
+ * Liest Termin-Details defensiv aus dem Cal.com Success-Event.
+ *
+ * Das Payload-Format unterscheidet sich je nach Embed-Version:
+ *  - "bookingSuccessful"   (v1): verschachtelt -> data.booking.{startTime,endTime,title,attendees}
+ *  - "bookingSuccessfulV2" (v2): flach        -> data.{startTime,endTime,title}
+ * Zusätzlich liegen die Daten unter e.detail.data. Wir prüfen alle bekannten
+ * Pfade und liefern null-sichere Felder zurück.
+ */
+function parseBookingEvent(e: any): CalBookingDetails {
+  const detail = e?.detail ?? e ?? {};
+  const data = detail.data ?? detail;
+  const booking = data?.booking ?? data ?? {};
+
+  return {
+    title:
+      booking?.title ??
+      data?.title ??
+      data?.eventType?.title ??
+      undefined,
+    startTime: booking?.startTime ?? data?.startTime ?? data?.date ?? undefined,
+    endTime: booking?.endTime ?? data?.endTime ?? undefined,
+  };
+}
 
 /**
  * Bettet einen Cal.com Event-Type als Inline-Kalender direkt im Buchungsmodal ein.
  * Name und E-Mail aus dem eigenen Formular werden – falls vorhanden – vorbefüllt.
  */
-export default function CalEmbed({ calPath, prefill }: Props) {
+export default function CalEmbed({ calPath, prefill, onBookingSuccess }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
+
+  // Callback in einem Ref halten, damit das Cal-Event-Abo nicht bei jeder
+  // Prop-Änderung neu registriert werden muss.
+  const onSuccessRef = useRef(onBookingSuccess);
+  onSuccessRef.current = onBookingSuccess;
 
   useEffect(() => {
     if (!ref.current) return;
@@ -106,11 +145,22 @@ export default function CalEmbed({ calPath, prefill }: Props) {
       callback: () => setLoaded(true),
     });
 
+    // Erfolgreiche Buchung: Cal.com feuert in der aktuellen Embed-Version das
+    // Event "bookingSuccessful". Ältere/neuere Builds nutzen zusätzlich
+    // "bookingSuccessfulV2" – wir hören defensiv auf beide, damit der eigene
+    // Success-Screen zuverlässig ausgelöst wird (kein Timeout/Text-Parsing).
+    const handleSuccess = (e: any) =>
+      onSuccessRef.current?.(parseBookingEvent(e));
+    Cal('on', { action: 'bookingSuccessful', callback: handleSuccess });
+    Cal('on', { action: 'bookingSuccessfulV2', callback: handleSuccess });
+
     // Fallback, falls das Event nicht ankommt (z. B. langsame Verbindung)
     const t = window.setTimeout(() => setLoaded(true), 4000);
 
     return () => {
       window.clearTimeout(t);
+      Cal('off', { action: 'bookingSuccessful', callback: handleSuccess });
+      Cal('off', { action: 'bookingSuccessfulV2', callback: handleSuccess });
       if (ref.current) ref.current.innerHTML = '';
     };
   }, [calPath, prefill?.name, prefill?.email, prefill?.notes]);

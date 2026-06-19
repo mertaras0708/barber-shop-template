@@ -21,6 +21,19 @@ export type CustomerDraft = {
   privacyAccepted: boolean;
 };
 
+/**
+ * Von Cal.com nach erfolgreicher Buchung gemeldete Termin-Details.
+ * Alle Felder optional, da das Cal-Event-Payload je nach Embed-Version variiert.
+ */
+export type BookedDetails = {
+  /** Booking-/Event-Titel, z. B. "Herrenhaarschnitt" */
+  title?: string;
+  /** ISO-Startzeitpunkt des Termins */
+  startTime?: string;
+  /** ISO-Endzeitpunkt des Termins */
+  endTime?: string;
+};
+
 export type BookingState = {
   isOpen: boolean;
   step: BookingStep;
@@ -32,6 +45,8 @@ export type BookingState = {
   /** HH:mm */
   time: string | null;
   customer: CustomerDraft;
+  /** Befüllt, sobald Cal.com eine Buchung bestätigt hat. */
+  booking: BookedDetails | null;
 };
 
 const emptyCustomer: CustomerDraft = {
@@ -51,6 +66,7 @@ const initialState: BookingState = {
   date: null,
   time: null,
   customer: emptyCustomer,
+  booking: null,
 };
 
 type Action =
@@ -65,7 +81,8 @@ type Action =
   | { type: 'SET_DATE'; date: string }
   | { type: 'SET_TIME'; time: string }
   | { type: 'SET_CUSTOMER'; patch: Partial<CustomerDraft> }
-  | { type: 'SET_PHASE'; phase: BookingPhase };
+  | { type: 'SET_PHASE'; phase: BookingPhase }
+  | { type: 'SET_SUCCESS'; booking: BookedDetails };
 
 function reducer(state: BookingState, action: Action): BookingState {
   switch (action.type) {
@@ -122,6 +139,8 @@ function reducer(state: BookingState, action: Action): BookingState {
       return { ...state, customer: { ...state.customer, ...action.patch } };
     case 'SET_PHASE':
       return { ...state, phase: action.phase };
+    case 'SET_SUCCESS':
+      return { ...state, phase: 'success', booking: action.booking };
     default:
       return state;
   }
@@ -141,6 +160,8 @@ type BookingContextValue = {
   setTime: (time: string) => void;
   setCustomer: (patch: Partial<CustomerDraft>) => void;
   setPhase: (phase: BookingPhase) => void;
+  /** Setzt phase='success' und speichert die von Cal.com gemeldeten Termin-Details. */
+  setSuccess: (booking: BookedDetails) => void;
   /** Validierung des aktuellen Schritts */
   canAdvance: boolean;
 };
@@ -200,6 +221,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
       setTime: (time) => dispatch({ type: 'SET_TIME', time }),
       setCustomer: (patch) => dispatch({ type: 'SET_CUSTOMER', patch }),
       setPhase: (phase) => dispatch({ type: 'SET_PHASE', phase }),
+      setSuccess: (booking) => dispatch({ type: 'SET_SUCCESS', booking }),
       canAdvance: isStepValid(state),
     }),
     [state, open],

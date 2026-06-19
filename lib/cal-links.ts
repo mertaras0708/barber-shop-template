@@ -40,15 +40,50 @@ export const calLinks: Record<string, Record<string, string>> = {
 };
 
 /**
+ * ZUKÜNFTIGE ERWEITERUNG – aktuell DEAKTIVIERT.
+ *
+ * Die Option „Beliebiger Barber" wurde in der UI entfernt, weil sie ein
+ * Cal.com Team-/Round-Robin-Event voraussetzt (kostenpflichtiges Team-Feature).
+ * Das aktuelle kostenlose Setup nutzt ausschließlich konkrete Barber-Links.
+ *
+ * Dieses Mapping bleibt als Vorlage erhalten: Sobald ein Cal.com-Team mit
+ * Round-Robin-Events existiert, hier pro Service GENAU EINE Team-Event-URL
+ * eintragen (Format: https://cal.com/team/origami-concepts/herrenhaarschnitt)
+ * und in `BarberSelector` wieder eine „Beliebig"-Option (id 'any') anbieten.
+ *
+ * Solange `state.barberId` nie 'any' werden kann, ist dieser Pfad toter Code
+ * und kann keinen unerreichbaren Zustand erzeugen.
+ */
+export const anyBarberLinks: Record<string, string> = {
+  'herrenhaarschnitt': '',
+  'skin-fade': '',
+  'haare-bart': '',
+  'bart-trimmen': '',
+  'nassrasur': '',
+  'styling-finish': '',
+};
+
+/**
  * Ermittelt die volle Cal.com-URL für eine Kombination aus Barber und Service.
- * Gibt `null` zurück, wenn keine passende Buchung hinterlegt ist
- * (z. B. bei „Beliebig" oder einer noch nicht gepflegten Kombination).
+ *
+ * - Konkreter Barber: Lookup in `calLinks[barberId][serviceId]`.
+ * - „Beliebiger Barber" (barberId === 'any'): Lookup im Team-/Round-Robin-Mapping
+ *   `anyBarberLinks[serviceId]`.
+ *
+ * Gibt `null` zurück, wenn keine passende Buchung hinterlegt ist.
  */
 export function getCalLink(
   barberId: string | null,
   serviceId: string | null,
 ): string | null {
   if (!barberId || !serviceId) return null;
+
+  // „Beliebiger Barber": auf den Team-/Round-Robin-Event mappen.
+  // Leerer String = noch nicht konfiguriert -> null (kein stiller Fehlschlag).
+  if (barberId === 'any') {
+    return anyBarberLinks[serviceId] || null;
+  }
+
   return calLinks[barberId]?.[serviceId] ?? null;
 }
 

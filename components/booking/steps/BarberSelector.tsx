@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Star, Sparkles } from 'lucide-react';
+import { Check, Star } from 'lucide-react';
 import clsx from 'clsx';
 import { team } from '@/data/team';
 import { useBooking } from '@/lib/booking-context';
@@ -21,7 +21,7 @@ export default function BarberSelector() {
           <HeadlineHighlight case="inherit">buchen</HeadlineHighlight>?
         </>
       }
-      description={`Jeder Barber hat seinen eigenen Stil, oder wähle „Beliebig" und wir teilen dich dem nächsten freien Barber zu.`}
+      description={`Jeder Barber hat seinen eigenen Stil – wähle, bei wem du deinen Termin buchen möchtest.`}
     >
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
         {team.map((b) => {
@@ -87,44 +87,6 @@ export default function BarberSelector() {
             </li>
           );
         })}
-
-        {/* Beliebig */}
-        <li className="sm:col-span-2">
-          <button
-            type="button"
-            onClick={() => setBarber('any')}
-            aria-pressed={state.barberId === 'any'}
-            className={clsx(
-              'group relative w-full text-left flex items-center gap-5 p-4 md:p-5 border transition-all duration-300',
-              state.barberId === 'any'
-                ? 'border-copper bg-copper/[0.06]'
-                : 'border-cream/12 border-dashed hover:border-cream/35',
-            )}
-          >
-            <div className="flex h-12 w-12 items-center justify-center border border-cream/15 flex-shrink-0">
-              <Sparkles className="h-5 w-5 text-copper" aria-hidden />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="font-serif text-lg text-cream">
-                Beliebig, nächster freier Barber
-              </h4>
-              <p className="text-xs text-cream/60 mt-1">
-                Wir teilen dich automatisch dem nächsten verfügbaren Barber zu.
-              </p>
-            </div>
-            <span
-              className={clsx(
-                'flex h-5 w-5 items-center justify-center border transition-all flex-shrink-0',
-                state.barberId === 'any'
-                  ? 'bg-copper border-copper text-ink'
-                  : 'border-cream/25 text-transparent',
-              )}
-              aria-hidden
-            >
-              <Check className="h-3 w-3" strokeWidth={2.5} />
-            </span>
-          </button>
-        </li>
       </ul>
     </StepFrame>
   );
